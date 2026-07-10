@@ -68,6 +68,10 @@ test.describe("Berries", () => {
 
 test.describe("404", () => {
   test("shows a not-found page for an unknown Pokémon", async ({ page }) => {
+    await page.route(
+      "https://pokeapi.co/api/v2/pokemon/not-a-real-pokemon",
+      (route) => route.fulfill({ body: "{}", status: 404 })
+    );
     await page.goto("/pokemon/not-a-real-pokemon");
     await expect(
       page.getByRole("heading", { name: "Pokémon not found" })
