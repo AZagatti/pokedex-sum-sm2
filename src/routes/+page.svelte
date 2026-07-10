@@ -85,6 +85,7 @@
 
 	let filteredNames = $state<Set<string> | null>(null);
 	let baseList = $state<{ name: string; url: string }[]>([]);
+	let filterRequestId = 0;
 
 	let visibleList = $state<{ name: string; url: string }[]>([]);
 
@@ -152,8 +153,14 @@
 		void selectedGeneration;
 		void selectedTypes.length;
 		untrack(() => {
+			filterRequestId += 1;
+			const requestId = filterRequestId;
 			(async () => {
-				filteredNames = await loadFilteredNameSet();
+				const names = await loadFilteredNameSet();
+				if (requestId !== filterRequestId) {
+					return;
+				}
+				filteredNames = names;
 				resetDisplay();
 			})();
 		});

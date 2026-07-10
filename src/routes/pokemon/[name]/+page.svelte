@@ -56,12 +56,16 @@
 	let playing = $state(false);
 	const cryUrl = $derived(pokemon.cries?.latest ?? pokemon.cries?.legacy ?? null);
 
-	const playCry = (): void => {
+	const playCry = async (): Promise<void> => {
 		if (!(audio && cryUrl)) {
 			return;
 		}
 		audio.currentTime = 0;
-		audio.play();
+		try {
+			await audio.play();
+		} catch {
+			// Autoplay/network errors are non-fatal — the cry button simply stays inert.
+		}
 	};
 
 	interface EvoNode {
@@ -102,14 +106,15 @@
 	<div class="flex flex-col items-center gap-4 px-6 py-8 sm:flex-row sm:items-start">
 		<div class="flex flex-col items-center gap-3">
 			<PokemonImage src={artwork} alt={formatPokemonName(pokemon.name)} size={220} />
-			<div class="flex flex-wrap justify-center gap-1" role="group" aria-label="Sprite variant">
+			<div class="flex flex-wrap justify-center gap-2" role="group" aria-label="Sprite variant">
 				{#each spriteVariants as variant (variant.key)}
 					{#if pokemon.sprites[variant.key]}
 						<button
 							type="button"
-							class="rounded-full px-2 py-1 text-xs {activeVariant === variant.key
-								? 'bg-indigo-600 text-white'
-								: 'bg-neutral-100 dark:bg-neutral-800'}"
+							class="rounded-full border px-2.5 py-1 text-xs transition-colors {activeVariant ===
+							variant.key
+								? 'border-indigo-600 bg-indigo-600 text-white'
+								: 'border-neutral-300 bg-neutral-100 text-neutral-700 hover:bg-neutral-200 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700'}"
 							onclick={() => (activeVariant = variant.key)}
 							aria-pressed={activeVariant === variant.key}
 						>
