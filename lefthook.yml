@@ -1,0 +1,18 @@
+pre-commit:
+  parallel: true
+  commands:
+    lint:
+      glob: "*.{js,ts,svelte}"
+      run: npx oxlint {staged_files}
+    format:
+      glob: "*.{js,ts,svelte,css,json,md}"
+      run: npx oxfmt {staged_files}
+      stage_fixed: true
+    typecheck:
+      glob: "*.{js,ts,svelte}"
+      run: npm run check
+
+pre-push:
+  commands:
+    test:
+      run: npm run test
