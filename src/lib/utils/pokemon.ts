@@ -22,6 +22,17 @@ export const TYPE_COLOR_VARS: Record<string, string> = {
 export const typeColor = (type: string): string =>
   TYPE_COLOR_VARS[type] ?? "var(--type-normal)";
 
+const LIGHT_TEXT_TYPES = new Set([
+  "fighting",
+  "poison",
+  "ghost",
+  "dragon",
+  "dark",
+]);
+
+export const typeTextColor = (type: string): string =>
+  LIGHT_TEXT_TYPES.has(type) ? "#ffffff" : "#1a1b23";
+
 export const capitalize = (text: string): string =>
   text.charAt(0).toUpperCase() + text.slice(1);
 

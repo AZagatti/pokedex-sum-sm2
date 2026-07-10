@@ -4,7 +4,7 @@
 	import { getGeneration, getPokemon, getPokemonList, getType, extractIdFromUrl } from '$lib/api/client';
 	import PokemonCard from '$lib/components/PokemonCard.svelte';
 	import PokemonCardSkeleton from '$lib/components/PokemonCardSkeleton.svelte';
-	import { formatPokemonName } from '$lib/utils/pokemon';
+	import { formatPokemonName, typeColor, typeTextColor } from '$lib/utils/pokemon';
 	import type { PageData } from './$types';
 
 	const { data }: { data: PageData } = $props();
@@ -286,11 +286,10 @@
 				class="rounded-full px-2.5 py-1 text-xs capitalize transition-transform {selectedTypes.includes(
 					type
 				)
-					? 'scale-105 font-semibold text-white shadow'
+					? 'scale-105 font-semibold shadow'
 					: 'bg-neutral-100 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300'}"
-				style:background-color={selectedTypes.includes(type)
-					? `var(--type-${type})`
-					: undefined}
+				style:background-color={selectedTypes.includes(type) ? typeColor(type) : undefined}
+				style:color={selectedTypes.includes(type) ? typeTextColor(type) : undefined}
 			>
 				{type}
 			</button>
