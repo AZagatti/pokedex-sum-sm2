@@ -47,13 +47,16 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
 
-      - name: Build
-        env:
-          BASE_PATH: "/pokedex-sum-sm2"
+      - name: Build (for e2e, no base path)
         run: npm run build
 
       - name: E2E tests
         run: npm run test:e2e
+
+      - name: Build (for deploy, with base path)
+        env:
+          BASE_PATH: "/pokedex-sum-sm2"
+        run: npm run build
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v4
